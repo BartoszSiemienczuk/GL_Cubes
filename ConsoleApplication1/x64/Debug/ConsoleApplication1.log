@@ -1,10 +1,11 @@
-﻿Build started 01.06.2016 20:34:06.
+﻿Build started 01.06.2016 21:30:56.
      1>Project "F:\Dev\gl\GL_Cubes\ConsoleApplication1\ConsoleApplication1.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /IF:\Dev\gl\GL_Cubes\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/include/ /ZI /nologo /W3 /WX- /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
          main.cpp
-     1>f:\dev\gl\gl_cubes\consoleapplication1\main.cpp(82): warning C4305: 'initializing': truncation from 'double' to 'float'
-     1>f:\dev\gl\gl_cubes\consoleapplication1\main.cpp(108): warning C4305: 'initializing': truncation from 'double' to 'float'
+     1>f:\dev\gl\gl_cubes\consoleapplication1\main.cpp(83): warning C4305: 'initializing': truncation from 'double' to 'float'
+     1>f:\dev\gl\gl_cubes\consoleapplication1\main.cpp(109): warning C4305: 'initializing': truncation from 'double' to 'float'
+     1>f:\dev\gl\gl_cubes\consoleapplication1\main.cpp(161): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"F:\Dev\gl\GL_Cubes\x64\Debug\ConsoleApplication1.exe" /INCREMENTAL /NOLOGO F:\Dev\gl\GL_Cubes\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/lib/x64\glew32.lib F:\Dev\gl\GL_Cubes\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/lib/x64\glfw3dll.lib F:\Dev\gl\GL_Cubes\packages\nupengl.core.0.1.0.1\build\native\../..//build/native/lib/x64\freeglut.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"F:\Dev\gl\GL_Cubes\x64\Debug\ConsoleApplication1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\Dev\gl\GL_Cubes\x64\Debug\ConsoleApplication1.lib" /MACHINE:X64 x64\Debug\BaseObject.obj
          x64\Debug\Camera.obj
@@ -16,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.94
+Time Elapsed 00:00:00.84

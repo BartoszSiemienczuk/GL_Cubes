@@ -12,6 +12,7 @@ char title[] = "3D Shapes";
 float rotation = 0.0;
 std::vector<Cube> cubes;
 Camera mainCam;
+Vector3 lastMousePos = Vector3(0, 0, 0);
 
 /* Initialize OpenGL Graphics */
 void initGL() {
@@ -108,14 +109,14 @@ void moveCamera(unsigned char key) {
 	float fraction = 0.1;
 	float angleStep = 0.05f;
 	switch (key) {
-		case 'a':
+		/*case 'a':
 			mainCam.setAngle(mainCam.getAngle() - angleStep);
 			mainCam.setRotation(sin(mainCam.getAngle()), 1.0f, -cos(mainCam.getAngle()));
 			break;
 		case 'd':
 			mainCam.setAngle(mainCam.getAngle() + angleStep);
 			mainCam.setRotation(sin(mainCam.getAngle()), 1.0f, -cos(mainCam.getAngle()));
-			break;
+			break;*/
 		case 'w':
 			mainCam.translate(mainCam.getRotation().x * fraction, 0, mainCam.getRotation().z * fraction);
 			break;
@@ -137,11 +138,27 @@ void keyboardCallback(unsigned char key, int x, int y) {
 
 		case 'w':
 		case 's':
-		case 'a':
-		case 'd':
+		//case 'a':
+		//case 'd':
 			moveCamera(key);
 			break;
 	}
+}
+
+void passiveMouseCallback(int x, int y) {
+	float angleStep = 0.001f;
+
+	float deltaX = (lastMousePos.x - x) * -1;
+	float deltaY = (lastMousePos.y - y) * -1;
+	mainCam.setAngle(mainCam.getAngle() + (angleStep*deltaX));
+	float vAngle = mainCam.getVertAngle() + (angleStep*deltaY);
+	if (vAngle > 20.0f)
+		vAngle = 20.0f;
+	if (vAngle < -20.0f)
+		vAngle = -20.0f;
+	mainCam.setVertAngle(vAngle);
+	mainCam.setRotation(sin(mainCam.getAngle()), sin(mainCam.getVertAngle()), -cos(mainCam.getAngle()));
+	lastMousePos.setPosition(x, y, 1.0f);
 }
 
 void specialKeyboardCallback(int key, int x, int y)
@@ -211,6 +228,7 @@ int main(int argc, char** argv) {
 	glutIdleFunc(display);			//to animate when idle
 	glutKeyboardFunc(keyboardCallback);
 	glutSpecialFunc(specialKeyboardCallback); 
+	glutPassiveMotionFunc(passiveMouseCallback);
 	glutReshapeFunc(reshape);       // Register callback handler for window re-size event
 	initCubes();					//create some cubes
 	initGL();                       // Our own OpenGL initialization
