@@ -2,6 +2,7 @@
 #include <windows.h>  // for MS Windows
 #include <GL/glut.h>  // GLUT, include glu.h and gl.h
 #include "Cube.h"
+#include "Camera.h"
 #include <iostream>
 #include <cstdio>
 #include <vector>
@@ -10,10 +11,11 @@
 char title[] = "3D Shapes";
 float rotation = 0.0;
 std::vector<Cube> cubes;
+Camera mainCam;
 
 /* Initialize OpenGL Graphics */
 void initGL() {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+	glClearColor(0.1f, 0.1f, 0.5f, 0.75f); // Set background color
 	glClearDepth(1.0f);                   // Set background depth to farthest
 	glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
 	glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
@@ -21,10 +23,23 @@ void initGL() {
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
 }
 
+void drawGround() {
+	glColor3f(0.9f, 0.9f, 0.9f);
+	glBegin(GL_QUADS);
+	glVertex3f(-100.0f, -2.0f, -100.0f);
+	glVertex3f(-100.0f, -2.0f, 100.0f);
+	glVertex3f(100.0f, -2.0f, 100.0f);
+	glVertex3f(100.0f, -2.0f, -100.0f);
+	glEnd();
+}
+
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
 	glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
-	
+
+	mainCam.update();
+
+	drawGround();
 	for (auto i = 0; i < cubes.size(); i++)
 	{
 		cubes[i].drawCube();
@@ -89,11 +104,44 @@ void moveCube(int direction)
 	}
 }
 
+void moveCamera(unsigned char key) {
+	float fraction = 0.1;
+	float angleStep = 0.05f;
+	switch (key) {
+		case 'a':
+			mainCam.setAngle(mainCam.getAngle() - angleStep);
+			mainCam.setRotation(sin(mainCam.getAngle()), 1.0f, -cos(mainCam.getAngle()));
+			break;
+		case 'd':
+			mainCam.setAngle(mainCam.getAngle() + angleStep);
+			mainCam.setRotation(sin(mainCam.getAngle()), 1.0f, -cos(mainCam.getAngle()));
+			break;
+		case 'w':
+			mainCam.translate(mainCam.getRotation().x * fraction, 0, mainCam.getRotation().z * fraction);
+			break;
+		case 's':
+			mainCam.translate(mainCam.getRotation().x * fraction * -1, 0, mainCam.getRotation().z * fraction * -1);
+			break;
+	}
+}
+
 void keyboardCallback(unsigned char key, int x, int y) {
-	if (key == '[')
-		selectNextCube(true);
-	else if(key == ']')
-		selectNextCube(false);
+	switch (key) {
+		case '[':
+			selectNextCube(true);
+			break;
+		case ']':
+			selectNextCube(false);
+			break;
+
+
+		case 'w':
+		case 's':
+		case 'a':
+		case 'd':
+			moveCamera(key);
+			break;
+	}
 }
 
 void specialKeyboardCallback(int key, int x, int y)
@@ -105,7 +153,6 @@ void specialKeyboardCallback(int key, int x, int y)
 		case GLUT_KEY_RIGHT:
 		case GLUT_KEY_LEFT:
 			moveCube(key);
-		break;
 	}
 }
 
@@ -146,10 +193,17 @@ void initCubes()
 	cubes[0].setSelected(true);
 }
 
+void initCamera() {
+	mainCam.setPosition(0.0f, 1.0f, 5.0f);
+	mainCam.setRotation(0.0f, 1.0f, -1.0f);
+	mainCam.setAngle(0.0);
+}
+
+
 /* Main function: GLUT runs as a console application starting at main() */
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);            // Initialize GLUT
-	glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // Enable double buffered mode and stuff
 	glutInitWindowSize(640, 480);   // Set the window's initial width & height
 	glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
 	glutCreateWindow(title);          // Create window with the given title

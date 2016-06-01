@@ -3,12 +3,6 @@
 #include <GL/freeglut.h>
 #include <GL/glut.h>
 
-void Cube::translate(float x, float y, float z)
-{
-	position.x += x;
-	position.y += y;
-	position.z += z;
-}
 
 Cube::Cube(void)
 {
@@ -23,46 +17,6 @@ Cube::Cube(void)
 	scale = 1.0f;
 }
 
-void Cube::setPosition(Vector3 pPosition)
-{
-	position = pPosition;
-}
-
-void Cube::setPosition(float pX, float pY, float pZ)
-{
-	position.x = pX;
-	position.y = pY;
-	position.z = pZ;
-}
-
-void Cube::setRotation(Vector3 pRotation)
-{
-	rotation = pRotation;
-}
-
-void Cube::setRotation(float pX, float pY, float pZ)
-{
-	while (pX > 360)
-		pX -= 360;
-	rotation.x = pX;
-
-
-	while (pY > 360)
-		pY -= 360;
-	rotation.y = pY;
-
-
-	while (pZ > 360)
-		pZ -= 360;
-	rotation.z = pZ;
-
-}
-
-void Cube::setScale(float pScale)
-{
-	scale = pScale;
-}
-
 bool Cube::getSelected() const
 {
 	return selected;
@@ -75,7 +29,7 @@ void Cube::setSelected(bool selected)
 
 void Cube::drawCube()
 {
-	glLoadIdentity();
+	//glLoadIdentity();
 
 	glTranslatef(position.x, position.y, position.z);
 	glRotatef(rotation.x, 1, 0, 0);
