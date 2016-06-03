@@ -110,12 +110,10 @@ void moveCamera(unsigned char key) {
 	float angleStep = 0.05f;
 	switch (key) {
 		/*case 'a':
-			mainCam.setAngle(mainCam.getAngle() - angleStep);
-			mainCam.setRotation(sin(mainCam.getAngle()), 1.0f, -cos(mainCam.getAngle()));
+			mainCam.translate(mainCam.getPosition().x * fraction, 0, 0);
 			break;
 		case 'd':
-			mainCam.setAngle(mainCam.getAngle() + angleStep);
-			mainCam.setRotation(sin(mainCam.getAngle()), 1.0f, -cos(mainCam.getAngle()));
+			mainCam.translate(mainCam.getPosition().x * fraction, 0, 0);
 			break;*/
 		case 'w':
 			mainCam.translate(mainCam.getRotation().x * fraction, 0, mainCam.getRotation().z * fraction);
@@ -138,26 +136,27 @@ void keyboardCallback(unsigned char key, int x, int y) {
 
 		case 'w':
 		case 's':
-		//case 'a':
-		//case 'd':
+		case 'a':
+		case 'd':
 			moveCamera(key);
 			break;
 	}
 }
 
 void passiveMouseCallback(int x, int y) {
-	float angleStep = 0.001f;
-
+	float angleStep = 0.006f;
+	float angleStepY = 0.003f;
 	float deltaX = (lastMousePos.x - x) * -1;
-	float deltaY = (lastMousePos.y - y) * -1;
+
+	float windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+	y = windowHeight - y;
+	float deltaY = y / windowHeight;
+	std::cout << deltaY << std::endl;
+
 	mainCam.setAngle(mainCam.getAngle() + (angleStep*deltaX));
-	float vAngle = mainCam.getVertAngle() + (angleStep*deltaY);
-	if (vAngle > 20.0f)
-		vAngle = 20.0f;
-	if (vAngle < -20.0f)
-		vAngle = -20.0f;
-	mainCam.setVertAngle(vAngle);
-	mainCam.setRotation(sin(mainCam.getAngle()), sin(mainCam.getVertAngle()), -cos(mainCam.getAngle()));
+	mainCam.setVertAngle(deltaY*2);
+
+	mainCam.setRotation(sin(mainCam.getAngle()), mainCam.getVertAngle(), -cos(mainCam.getAngle()));
 	lastMousePos.setPosition(x, y, 1.0f);
 }
 
@@ -214,6 +213,7 @@ void initCamera() {
 	mainCam.setPosition(0.0f, 1.0f, 5.0f);
 	mainCam.setRotation(0.0f, 1.0f, -1.0f);
 	mainCam.setAngle(0.0);
+	mainCam.setVertAngle(1.0f);
 }
 
 
@@ -232,6 +232,7 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(reshape);       // Register callback handler for window re-size event
 	initCubes();					//create some cubes
 	initGL();                       // Our own OpenGL initialization
+	initCamera();
 	glutMainLoop();                 // Enter the infinite event-processing loop
 	return 0;
 }

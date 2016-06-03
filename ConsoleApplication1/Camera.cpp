@@ -37,6 +37,6 @@ void Camera::update()
 	//rotation here is really the point to look at
 	//third vector is "up"
 	gluLookAt(position.x, 1.0f, position.z,
-		position.x+rotation.x, position.y+rotation.y, position.z+rotation.z,
+		position.x+rotation.x, rotation.y, position.z+rotation.z,
 		0.0f, 1.0f, 0.0f);
 }
